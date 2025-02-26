@@ -293,12 +293,12 @@ def get_sos_s3(sos_bucket, run_type, version):
     if "Contents" in s3_files.keys():
         sos_s3_files = [sos_file["Key"].split("/")[-1] for sos_file in s3_files["Contents"]]
 
-        sos_s3_string = f"SOS granules stored in s3://{sos_bucket}\n\n"
+        sos_s3_string = f"SOS granules stored in s3://{sos_bucket}/{run_type}/{version}\n\n"
         for sos_s3_file in sos_s3_files:
             sos_s3_string += f"- {sos_s3_file}\n"
 
     else:
-        sos_s3_string = f"No SOS granules stored in S3://{sos_bucket}.\n"
+        sos_s3_string = f"No SOS granules stored in S3://{sos_bucket}/{run_type}/{version}.\n"
 
     return sos_s3_string
 
