@@ -235,7 +235,7 @@ def send_module_report(sos_bucket, run_type, bucket_report, bucket_failures, wor
             subject = f"!FAILURE! Confluence workflow report {date_str} UTC"
             message = "CONFLUENCE WORKFLOW FAILURE.\n\n" \
                 + f"To locate failures: See AWS Step Function: {workflow} with execution: {name}.\n\n" \
-                + "Please visit the following link for documentation on how to troubleshoot: [link].\n\n"
+                + "Please visit the following link for documentation on how to troubleshoot: [https://wiki.jpl.nasa.gov/display/PD/Confluence#Confluence-howtohandleerrors].\n\n"
         else:
             subject = f"Confluence workflow report {date_str} UTC"
             message = "CONFLUENCE WORKFLOW SUCCESSFULLY COMPLETED.\n\n"
