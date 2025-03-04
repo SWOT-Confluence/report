@@ -283,7 +283,6 @@ def format_output(module_data, workflow):
 def get_sos_s3(sos_bucket, run_type, version):
     """Return name of granules created in SOS bucket."""
 
-    version = "0008"
     s3_files = S3.list_objects_v2(
         Bucket=sos_bucket,
         MaxKeys=1000,
