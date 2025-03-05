@@ -367,7 +367,6 @@ if __name__ == "__main__":
 
     with tempfile.TemporaryDirectory() as temp_dir:
         data_dir = pathlib.Path(temp_dir)
-        data_dir = pathlib.Path("/Users/tebaldi/Documents/workspace/confluence/data/modules/report")
         module_file, failure_file = write_module_data(module_data, failure_data, data_dir)
         bucket_report, bucket_failures = upload_module_data(module_file, failure_file, bucket, bucket_key, data_dir)
 
