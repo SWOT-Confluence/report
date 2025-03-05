@@ -46,7 +46,8 @@ def retrieve_total_time(exe_id, module_data):
     exe_data = SFN.describe_execution(
         executionArn=exe_id
     )
-    module_data["total_time"] = str(exe_data["stopDate"] - exe_data["startDate"])
+    # Get current time as the workflow is still execution and stopDate is not populated
+    module_data["total_time"] = str(datetime.datetime.now(datetime.timezone.utc) - exe_data["startDate"])
 
 def retrieve_task_data(exe_id, module_data):
     """Retrieve execution data for specific state machine tasks."""
