@@ -82,7 +82,10 @@ def get_task_stats(event):
     if "taskSucceededEventDetails" in event.keys():
         event_data = json.loads(event["taskSucceededEventDetails"]["output"])
     if "taskFailedEventDetails" in event.keys():
-        event_data = json.loads(event["taskFailedEventDetails"]["output"])
+        if "output" in event["taskFailedEventDetails"].keys():
+            event_data = json.loads(event["taskFailedEventDetails"]["output"])
+        if "cause" in event["taskFailedEventDetails"].keys():
+            event_data = json.loads(event["taskFailedEventDetails"]["cause"])
 
     task_stats = {}
     if event_data:
@@ -267,9 +270,10 @@ def format_output(module_data, workflow):
     total_succeeded = 0
     total_failed = 0
     for module in module_data["modules"]:
-        total_jobs += module["Total Jobs"]
-        total_succeeded += module["Succeeded"]
-        total_failed += module["Failed"]
+        if module:
+            total_jobs += module["Total Jobs"]
+            total_succeeded += module["Succeeded"]
+            total_failed += module["Failed"]
     total_failed_percentage = (total_failed / total_jobs) * 100
     total_execution_time = module_data["total_time"]
 
