@@ -217,13 +217,12 @@ def upload_module_data(module_file, failure_file, bucket, bucket_key, data_dir):
 
     return f"{bucket}/{bucket_key}/{module_file.name}", f"{bucket}/{bucket_key}/{failure_file.name}" 
 
-def send_module_report(sos_bucket, run_type, bucket_report, bucket_failures, workflow, name):
+def send_module_report(sos_bucket, run_type, bucket_report, bucket_failures, workflow, name, version):
     """E-mail report module data to SNS topic and include failure if applicable."""
 
     total_stats = format_output(module_data, workflow)
     logging.debug(total_stats)
 
-    version = name.split("-")[2]
     sos_s3_files = get_sos_s3(sos_bucket, run_type, version)
     logging.debug(sos_s3_files)
 
@@ -339,6 +338,10 @@ def create_args():
                             "--fail",
                             action="store_true",
                             help="Indicates workflow state failure.")
+    arg_parser.add_argument("-v",
+                            "--version",
+                            type=str,
+                            help="Version of workflow to locate Sos granules.")
     return arg_parser
 
 if __name__ == "__main__":
@@ -356,10 +359,12 @@ if __name__ == "__main__":
     bucket = args.bucket
     bucket_key = args.bucketkey
     failure = args.fail
+    version = args.version
 
     logging.info("Execution ID: %s", exe_id)
     logging.info("Workflow: %s", workflow)
     logging.info("Name: %s", name)
+    logging.info("Version: %s", version)
     logging.info("Temporal range: %s", temporal_range)
     logging.info("SOS bucket: %s", sos_bucket)
     logging.info("Run type: %s", run_type)
@@ -374,7 +379,7 @@ if __name__ == "__main__":
         module_file, failure_file = write_module_data(module_data, failure_data, data_dir)
         bucket_report, bucket_failures = upload_module_data(module_file, failure_file, bucket, bucket_key, data_dir)
 
-    succeeded = send_module_report(sos_bucket, run_type, bucket_report, bucket_failures, workflow, name)
+    succeeded = send_module_report(sos_bucket, run_type, bucket_report, bucket_failures, workflow, name, version)
     if not succeeded:
         logging.info("Error encountered; exiting now...")
         sys.exit(1)
